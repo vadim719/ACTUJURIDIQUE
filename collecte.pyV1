@@ -68,7 +68,11 @@ def collecter_judilibre(h, debut, fin, items):
     while True:
         r = requete("GET", f"{JUDI}/export", headers=h, params={
             "date_start": debut, "date_end": fin, "batch": lot, "batch_size": 100})
-        resultats = r.json().get("results", [])
+        corps = r.json()
+        if lot == 0:
+            print(f"Judilibre : période {debut} -> {fin}, clés reçues = {list(corps.keys())}, "
+                  f"total = {corps.get('total')}")
+        resultats = corps.get("results", [])
         if not resultats:
             break
         for d in resultats:
