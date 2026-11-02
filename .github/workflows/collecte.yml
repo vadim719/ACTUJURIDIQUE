@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 5 * * *"   # chaque jour à 5h UTC
   workflow_dispatch:       # lancement manuel possible depuis l'onglet Actions
+    inputs:
+      depuis:
+        description: "Date de début AAAA-MM-JJ (facultatif, pour remonter dans le temps)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -25,8 +30,14 @@ jobs:
       - run: pip install requests
 
       - name: Collecte
-        run: python collecte.py
+        run: |
+          if [ -n "$DEPUIS" ]; then
+            python collecte.py --depuis "$DEPUIS"
+          else
+            python collecte.py
+          fi
         env:
+          DEPUIS: ${{ github.event.inputs.depuis }}
           PISTE_CLIENT_ID: ${{ secrets.PISTE_CLIENT_ID }}
           PISTE_CLIENT_SECRET: ${{ secrets.PISTE_CLIENT_SECRET }}
 
