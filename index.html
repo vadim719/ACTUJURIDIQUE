@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Veille juridique</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f2f4f8;--card:#fff;--ink:#14213d;--mute:#5b6577;--line:#d9dee8;--accent:#b3202a;--bar:#c5cddd;--bar-on:#14213d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1524;--card:#18203a;--ink:#e8ecf6;--mute:#9aa5bd;--line:#2a3555;--accent:#ff6b73;--bar:#2e3a5e;--bar-on:#e8ecf6;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Public Sans",system-ui,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+h1{font:600 clamp(28px,5vw,40px)/1.1 "Newsreader",Georgia,serif;margin:0 0 6px}
+.sub{color:var(--mute);margin:0 0 22px}
+.time{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 14px 10px;margin-bottom:18px}
+.time h2{font:600 15px "Public Sans",sans-serif;margin:0 0 10px}
+.bars{display:flex;align-items:flex-end;gap:6px;height:90px;overflow-x:auto}
+.bars button{flex:1;min-width:34px;border:0;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;color:var(--mute);font:500 12px "Public Sans",sans-serif}
+.bars i{display:block;width:100%;background:var(--bar);border-radius:4px 4px 0 0;margin-bottom:4px}
+.bars button[aria-pressed="true"]{color:var(--ink)}
+.bars button[aria-pressed="true"] i{background:var(--bar-on)}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tools{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+@media(min-width:640px){.tools{grid-template-columns:1fr 200px 160px}}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font:500 14px "Public Sans",sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.count{color:var(--mute);font-size:14px;margin:0 0 10px}
+article{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+article h3{font:600 19px/1.25 "Newsreader",Georgia,serif;margin:0 0 6px}
+article p{margin:0 0 8px;font-size:15px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mute)}
+.meta a{color:var(--accent);font-weight:600;text-decoration:none}
+.meta a:hover{text-decoration:underline}
+.tag{border:1px solid var(--line);border-radius:6px;padding:0 7px}
+.empty{padding:26px;text-align:center;color:var(--mute);border:1px dashed var(--line);border-radius:10px}
+.more{display:block;margin:14px auto 0;padding:10px 22px;border:1px solid var(--ink);background:none;color:var(--ink);border-radius:8px;font:500 15px "Public Sans",sans-serif;cursor:pointer}
+footer{margin-top:28px;color:var(--mute);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Veille juridique</h1>
+  <p class="sub">Les actualités du droit français, des archives aux publications du jour.</p>
+  <div class="time"><h2>Parcourir les archives par année</h2><div class="bars" id="bars"></div></div>
+  <div class="tools">
+    <input id="q" type="search" placeholder="Rechercher un mot, un thème…" aria-label="Rechercher">
+    <select id="src" aria-label="Source"><option value="">Toutes les sources</option></select>
+    <select id="ord" aria-label="Tri"><option value="d">Plus récentes</option><option value="a">Plus anciennes</option></select>
+  </div>
+  <div class="chips" id="chips"></div>
+  <p class="count" id="count"></p>
+  <div id="list"><div class="empty">Chargement…</div></div>
+  <footer id="foot">Sources : Légifrance, Judilibre (Cour de cassation). Contenus de l’État réutilisés selon leurs conditions de réutilisation.</footer>
+</div>
+<script>
+var D=[],st={y:"",m:"",s:"",q:"",o:"d",n:50};
+var $=function(i){return document.getElementById(i)};
+function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function url(u){return /^https:\/\//.test(u||"")?esc(u):"#"}
+function yr(r){return(r.date||"").slice(0,4)}
+function fmt(d){return d?new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}):""}
+function uniq(f){var a=[];D.forEach(function(r){var v=f(r);if(v&&a.indexOf(v)<0)a.push(v)});return a.sort()}
+function bars(){
+  var ys=uniq(yr),cnt=ys.map(function(y){return D.filter(function(r){return yr(r)===y}).length}),max=Math.max.apply(null,cnt.concat([1]));
+  $("bars").innerHTML=ys.map(function(y,i){return '<button data-y="'+y+'" aria-pressed="'+(st.y===y)+'" aria-label="'+y+' : '+cnt[i]+' actualités"><i style="height:'+(cnt[i]/max*60+8)+'px"></i>'+y+'</button>'}).join("");
+  Array.prototype.forEach.call($("bars").children,function(b){b.onclick=function(){st.y=st.y===b.dataset.y?"":b.dataset.y;st.n=50;render()}});
+}
+function chips(){
+  $("chips").innerHTML=[""].concat(uniq(function(r){return r.matiere})).map(function(m){return '<button class="chip" data-m="'+esc(m)+'" aria-pressed="'+(st.m===m)+'">'+(esc(m)||"Toutes les matières")+'</button>'}).join("");
+  Array.prototype.forEach.call($("chips").children,function(b){b.onclick=function(){st.m=b.dataset.m;st.n=50;render()}});
+}
+function render(){
+  bars();chips();
+  var q=st.q.toLowerCase();
+  var r=D.filter(function(x){return(!st.y||yr(x)===st.y)&&(!st.m||x.matiere===st.m)&&(!st.s||x.source===st.s)&&(!q||((x.titre||"")+" "+(x.resume||"")+" "+(x.matiere||"")).toLowerCase().indexOf(q)>=0)})
+   .sort(function(a,b){var p=a.date||"",s=b.date||"";return st.o==="d"?(p<s?1:-1):(p>s?1:-1)});
+  $("count").textContent=r.length+(r.length>1?" actualités":" actualité");
+  var h=r.slice(0,st.n).map(function(x){return '<article><h3>'+esc(x.titre)+'</h3>'+(x.resume?'<p>'+esc(x.resume)+'</p>':'')+'<div class="meta"><span>'+fmt(x.date)+'</span><span class="tag">'+esc(x.matiere)+'</span><a href="'+url(x.url)+'" target="_blank" rel="noopener">'+esc(x.source)+'</a></div></article>'}).join("");
+  if(r.length>st.n)h+='<button class="more" id="more">Afficher plus</button>';
+  $("list").innerHTML=h||'<div class="empty">Aucune actualité ne correspond. Retirez un filtre ou élargissez la recherche.</div>';
+  if($("more"))$("more").onclick=function(){st.n+=50;render()};
+}
+fetch("data.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+  D=j.items||[];
+  uniq(function(r){return r.source}).forEach(function(s){var o=document.createElement("option");o.value=s;o.textContent=s;$("src").appendChild(o)});
+  if(j.maj)$("foot").textContent="Dernière mise à jour : "+new Date(j.maj).toLocaleString("fr-FR",{dateStyle:"long",timeStyle:"short"})+". "+$("foot").textContent;
+  if(!D.length){$("list").innerHTML='<div class="empty">Aucune actualité pour l’instant. Lancez la collecte pour remplir le site.</div>';return}
+  render();
+}).catch(function(){$("list").innerHTML='<div class="empty">Impossible de charger data.json. En local, ouvrez la page via un petit serveur (python -m http.server), pas en double-cliquant sur le fichier.</div>'});
+$("q").oninput=function(){st.q=this.value;st.n=50;render()};
+$("src").onchange=function(){st.s=this.value;st.n=50;render()};
+$("ord").onchange=function(){st.o=this.value;render()};
+</script>
+</body>
+</html>
