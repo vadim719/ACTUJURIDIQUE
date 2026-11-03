@@ -1,0 +1,42 @@
+name: importer-archives
+
+on:
+  workflow_dispatch:       # uniquement lancement manuel
+    inputs:
+      limite:
+        description: "Nombre de fichiers pour un test (ex. 2000). Mettre 0 pour l'import complet."
+        required: true
+        default: "2000"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: importer
+  cancel-in-progress: false
+
+jobs:
+  importer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      - name: Import des archives DILA
+        env:
+          LIMITE: ${{ github.event.inputs.limite }}
+        run: python importer_dila.py --limite "$LIMITE"
+
+      - name: Publication des fichiers data/
+        run: |
+          git config user.name "bot-veille"
+          git config user.email "bot@users.noreply.github.com"
+          git add data
+          git commit -m "Import des archives DILA" || exit 0
+          git push
