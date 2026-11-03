@@ -53,41 +53,56 @@ footer{margin-top:28px;color:var(--mute);font-size:13px}
   <div class="chips" id="chips"></div>
   <p class="count" id="count"></p>
   <div id="list"><div class="empty">Chargement…</div></div>
-  <footer id="foot">Sources : Légifrance, Judilibre (Cour de cassation). Contenus de l’État réutilisés selon leurs conditions de réutilisation.</footer>
+  <footer id="foot">Sources : Légifrance, Judilibre et archives de la DILA (Cour de cassation). Contenus de l’État réutilisés selon leurs conditions de réutilisation.</footer>
 </div>
 <script>
-var D=[],st={y:"",m:"",s:"",q:"",o:"d",n:50};
+var REC=[],MAN={},D=[],cache={},first=true,st={y:"",m:"",s:"",q:"",o:"d",n:50};
 var $=function(i){return document.getElementById(i)};
 function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function url(u){return /^https:\/\//.test(u||"")?esc(u):"#"}
 function yr(r){return(r.date||"").slice(0,4)}
 function fmt(d){return d?new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}):""}
 function uniq(f){var a=[];D.forEach(function(r){var v=f(r);if(v&&a.indexOf(v)<0)a.push(v)});return a.sort()}
+function annees(){var c={};Object.keys(MAN).forEach(function(y){c[y]=MAN[y]});REC.forEach(function(r){var y=yr(r);if(y)c[y]=(c[y]||0)+1});return c}
 function bars(){
-  var ys=uniq(yr),cnt=ys.map(function(y){return D.filter(function(r){return yr(r)===y}).length}),max=Math.max.apply(null,cnt.concat([1]));
-  $("bars").innerHTML=ys.map(function(y,i){return '<button data-y="'+y+'" aria-pressed="'+(st.y===y)+'" aria-label="'+y+' : '+cnt[i]+' actualités"><i style="height:'+(cnt[i]/max*60+8)+'px"></i>'+y+'</button>'}).join("");
-  Array.prototype.forEach.call($("bars").children,function(b){b.onclick=function(){st.y=st.y===b.dataset.y?"":b.dataset.y;st.n=50;render()}});
+  var c=annees(),ys=Object.keys(c).sort(),max=Math.max.apply(null,ys.map(function(y){return c[y]}).concat([1])),b=$("bars"),sl=b.scrollLeft;
+  b.innerHTML=ys.map(function(y){return '<button data-y="'+y+'" aria-pressed="'+(st.y===y)+'" aria-label="'+y+' : '+c[y]+' actualités"><i style="height:'+(Math.sqrt(c[y]/max)*60+8)+'px"></i>'+y+'</button>'}).join("");
+  Array.prototype.forEach.call(b.children,function(x){x.onclick=function(){choisir(x.dataset.y)}});
+  b.scrollLeft=first?1e6:sl;first=false;
+}
+function choisir(y){
+  st.y=st.y===y?"":y;st.n=50;
+  if(st.y&&MAN[st.y]&&!cache[st.y]){
+    $("list").innerHTML='<div class="empty">Chargement de l’année '+esc(st.y)+'…</div>';
+    fetch("data/"+st.y+".json").then(function(r){return r.json()}).then(function(j){cache[st.y]=j;render()}).catch(function(){cache[st.y]=[];render()});
+  }else render();
 }
 function chips(){
   $("chips").innerHTML=[""].concat(uniq(function(r){return r.matiere})).map(function(m){return '<button class="chip" data-m="'+esc(m)+'" aria-pressed="'+(st.m===m)+'">'+(esc(m)||"Toutes les matières")+'</button>'}).join("");
   Array.prototype.forEach.call($("chips").children,function(b){b.onclick=function(){st.m=b.dataset.m;st.n=50;render()}});
 }
+function sources(){
+  $("src").innerHTML='<option value="">Toutes les sources</option>'+uniq(function(r){return r.source}).map(function(x){return '<option value="'+esc(x)+'"'+(x===st.s?' selected':'')+'>'+esc(x)+'</option>'}).join("");
+}
 function render(){
-  bars();chips();
+  D=st.y?REC.filter(function(r){return yr(r)===st.y}).concat(cache[st.y]||[]):REC;
+  bars();chips();sources();
   var q=st.q.toLowerCase();
-  var r=D.filter(function(x){return(!st.y||yr(x)===st.y)&&(!st.m||x.matiere===st.m)&&(!st.s||x.source===st.s)&&(!q||((x.titre||"")+" "+(x.resume||"")+" "+(x.matiere||"")).toLowerCase().indexOf(q)>=0)})
+  var r=D.filter(function(x){return(!st.m||x.matiere===st.m)&&(!st.s||x.source===st.s)&&(!q||((x.titre||"")+" "+(x.resume||"")+" "+(x.matiere||"")).toLowerCase().indexOf(q)>=0)})
    .sort(function(a,b){var p=a.date||"",s=b.date||"";return st.o==="d"?(p<s?1:-1):(p>s?1:-1)});
-  $("count").textContent=r.length+(r.length>1?" actualités":" actualité");
+  $("count").textContent=(st.y?"Année "+st.y+" : ":"Dernières actualités : ")+r.length+(r.length>1?" résultats":" résultat");
   var h=r.slice(0,st.n).map(function(x){return '<article><h3>'+esc(x.titre)+'</h3>'+(x.resume?'<p>'+esc(x.resume)+'</p>':'')+'<div class="meta"><span>'+fmt(x.date)+'</span><span class="tag">'+esc(x.matiere)+'</span><a href="'+url(x.url)+'" target="_blank" rel="noopener">'+esc(x.source)+'</a></div></article>'}).join("");
   if(r.length>st.n)h+='<button class="more" id="more">Afficher plus</button>';
-  $("list").innerHTML=h||'<div class="empty">Aucune actualité ne correspond. Retirez un filtre ou élargissez la recherche.</div>';
+  $("list").innerHTML=h||'<div class="empty">Aucun résultat. Retirez un filtre, élargissez la recherche, ou choisissez une année dans la frise ci-dessus.</div>';
   if($("more"))$("more").onclick=function(){st.n+=50;render()};
 }
-fetch("data.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
-  D=j.items||[];
-  uniq(function(r){return r.source}).forEach(function(s){var o=document.createElement("option");o.value=s;o.textContent=s;$("src").appendChild(o)});
-  if(j.maj)$("foot").textContent="Dernière mise à jour : "+new Date(j.maj).toLocaleString("fr-FR",{dateStyle:"long",timeStyle:"short"})+". "+$("foot").textContent;
-  if(!D.length){$("list").innerHTML='<div class="empty">Aucune actualité pour l’instant. Lancez la collecte pour remplir le site.</div>';return}
+Promise.all([
+  fetch("data.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}),
+  fetch("data/annees.json").then(function(r){return r.ok?r.json():{}}).catch(function(){return{}})
+]).then(function(a){
+  REC=a[0].items||[];MAN=a[1]||{};
+  if(a[0].maj)$("foot").textContent="Dernière mise à jour : "+new Date(a[0].maj).toLocaleString("fr-FR",{dateStyle:"long",timeStyle:"short"})+". "+$("foot").textContent;
+  if(!REC.length&&!Object.keys(MAN).length){$("list").innerHTML='<div class="empty">Aucune actualité pour l’instant. Lancez la collecte pour remplir le site.</div>';return}
   render();
 }).catch(function(){$("list").innerHTML='<div class="empty">Impossible de charger data.json. En local, ouvrez la page via un petit serveur (python -m http.server), pas en double-cliquant sur le fichier.</div>'});
 $("q").oninput=function(){st.q=this.value;st.n=50;render()};
