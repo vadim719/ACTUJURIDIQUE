@@ -1,5 +1,5 @@
 {
-"maj": "2026-11-02T20:18:56+00:00",
+"maj": "2026-11-03T05:42:57+00:00",
 "items": [
 {
 "id": "judilibre:6ad9d8107a10202137362298",
@@ -31661,6 +31661,15 @@
 "titre": "JORF n°0252 du 28 octobre 2026",
 "matiere": "Journal officiel",
 "url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055020030",
+"resume": "Numéro du Journal officiel de la République française."
+},
+{
+"id": "jorf:JORFCONT000055047265",
+"source": "Journal officiel",
+"date": null,
+"titre": "JORF n°0257 du 3 novembre 2026",
+"matiere": "Journal officiel",
+"url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055047265",
 "resume": "Numéro du Journal officiel de la République française."
 }
 ]
