@@ -1,6 +1,15 @@
 {
-"maj": "2026-11-03T05:42:57+00:00",
+"maj": "2026-11-04T05:47:18+00:00",
 "items": [
+{
+"id": "judilibre:6ae99f507a1020213705b96f",
+"source": "Judilibre",
+"date": "2026-11-03",
+"titre": "Les dispositions de l'article R. 116-2 du code de la voirie routière, aux termes desquelles constitue une contravention de la cinquième classe le fait, en l'absence d'autorisation, d'établir ou laisser croître des arbres",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6ae99f507a1020213705b96f",
+"resume": "cc – chambre cr"
+},
 {
 "id": "judilibre:6ad9d8107a10202137362298",
 "source": "Judilibre",
@@ -31670,6 +31679,15 @@
 "titre": "JORF n°0257 du 3 novembre 2026",
 "matiere": "Journal officiel",
 "url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055047265",
+"resume": "Numéro du Journal officiel de la République française."
+},
+{
+"id": "jorf:JORFCONT000055053315",
+"source": "Journal officiel",
+"date": null,
+"titre": "JORF n°0258 du 4 novembre 2026",
+"matiere": "Journal officiel",
+"url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055053315",
 "resume": "Numéro du Journal officiel de la République française."
 }
 ]
