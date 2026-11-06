@@ -32,6 +32,9 @@ jobs:
 
       - run: pip install requests
 
+      - name: Lister les archives disponibles chez la DILA
+        run: curl -s https://echanges.dila.gouv.fr/OPENDATA/CASS/ | grep -o 'href="[^"]*tar.gz"' | tail -15 || true
+
       - name: Import des archives DILA
         env:
           LIMITE: ${{ github.event.inputs.limite }}
