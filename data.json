@@ -1,5 +1,5 @@
 {
-"maj": "2026-11-05T05:49:39+00:00",
+"maj": "2026-11-06T05:48:59+00:00",
 "items": [
 {
 "id": "judilibre:6aeaf4297a1020213712f8fe",
@@ -144,6 +144,15 @@
 "matiere": "Pénal",
 "url": "https://www.courdecassation.fr/decision/6aeaf4307a1020213712f9c8",
 "resume": "cc – chambre cr"
+},
+{
+"id": "judilibre:6aeaf5ca7a10202137133f51",
+"source": "Judilibre",
+"date": "2026-11-04",
+"titre": "Il résulte de la combinaison des articles 1317 et 1318 du code civil, dans leur rédaction antérieure à celle issue de l'ordonnance n°2016-131 du 10 février 2016, et des articles 2 et 41 du décret n° 71-941 du 26 novembre",
+"matiere": "Famille et civil",
+"url": "https://www.courdecassation.fr/decision/6aeaf5ca7a10202137133f51",
+"resume": "cc – chambre civ1"
 },
 {
 "id": "judilibre:6ae99f507a1020213705b96f",
@@ -89495,6 +89504,15 @@
 "titre": "JORF n°0259 du 5 novembre 2026",
 "matiere": "Journal officiel",
 "url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055057686",
+"resume": "Numéro du Journal officiel de la République française."
+},
+{
+"id": "jorf:JORFCONT000055063671",
+"source": "Journal officiel",
+"date": null,
+"titre": "JORF n°0260 du 6 novembre 2026",
+"matiere": "Journal officiel",
+"url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055063671",
 "resume": "Numéro du Journal officiel de la République française."
 }
 ]
