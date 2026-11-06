@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Import unique des archives DILA (base CASS : Cour de cassation, depuis 1960)
 -> data/ANNEE.json (un fichier par année) + data/annees.json (nombre par année)
+   + indexsrc.jsonl (textes complets des sommaires, pour construire le moteur de recherche)
 
 Usage :
   python importer_dila.py --limite 2000   # test rapide sur 2000 fichiers
@@ -26,7 +27,7 @@ MATIERES = [("sociale", "Travail"), ("criminelle", "Pénal"), ("commerciale", "C
 
 
 def texte(el):
-    return " ".join("".join(el.itertext()).split()) if el is not None else ""
+    return " ".join(" ".join(el.itertext()).split()) if el is not None else ""
 
 
 def trouver_archive():
@@ -55,7 +56,7 @@ def lire(contenu):
     resume = texte(r.find(".//SOMMAIRE")) or texte(r.find(".//ANA"))
     return {"id": f"cass:{ident}", "source": SOURCE, "date": date, "titre": titre[:220],
             "matiere": matiere, "url": f"https://www.legifrance.gouv.fr/juri/id/{ident}",
-            "resume": resume[:300]}
+            "resume": resume[:400], "texte": resume[:4000]}
 
 
 def main():
@@ -66,6 +67,7 @@ def main():
     url = trouver_archive()
     print("Archive :", url)
     par_annee, vus, ignores = defaultdict(list), 0, 0
+    idx = open("indexsrc.jsonl", "w", encoding="utf-8")  # texte pour le moteur de recherche (non publié)
     with requests.get(url, stream=True, timeout=120) as r:
         r.raise_for_status()
         with tarfile.open(fileobj=r.raw, mode="r|gz") as tar:
@@ -78,6 +80,10 @@ def main():
                 except ET.ParseError:
                     e = None
                 if e:
+                    brut = e.pop("texte")
+                    idx.write(json.dumps({"url": e["url"], "titre": e["titre"], "date": e["date"],
+                                          "matiere": e["matiere"], "source": e["source"],
+                                          "texte": brut}, ensure_ascii=False) + "\n")
                     par_annee[e["date"][:4]].append(e)
                 else:
                     ignores += 1
@@ -86,6 +92,7 @@ def main():
                 if limite and vus >= limite:
                     break
 
+    idx.close()
     os.makedirs(SORTIE, exist_ok=True)
     comptes = {}
     for an, liste in sorted(par_annee.items()):
