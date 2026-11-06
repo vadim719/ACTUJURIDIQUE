@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Import unique des archives DILA (base CASS : Cour de cassation, depuis 1960)
+"""Import des archives DILA (base CASS : Cour de cassation, depuis 1960)
 -> data/ANNEE.json (un fichier par année) + data/annees.json (nombre par année)
-   + indexsrc.jsonl (textes complets des sommaires, pour construire le moteur de recherche)
+   + indexsrc.jsonl (sommaires complets, pour construire le moteur de recherche)
+
+Le script lit l'archive globale puis, si elles existent, toutes les archives de
+mise à jour publiées ensuite par la DILA (nouvelles décisions, corrections, suppressions).
 
 Usage :
-  python importer_dila.py --limite 2000   # test rapide sur 2000 fichiers
-  python importer_dila.py                 # import complet
+  python importer_dila.py --limite 2000   # test rapide (archive globale seulement)
+  python importer_dila.py                 # import complet + mises à jour
 """
 import argparse
 import json
@@ -17,7 +20,7 @@ from collections import defaultdict
 
 import requests
 
-BASE = "https://echanges.dila.gouv.fr/OPENDATA/CASS/"
+BASE = os.environ.get("DILA_BASE", "https://echanges.dila.gouv.fr/OPENDATA/CASS/")
 SORTIE = "data"
 SOURCE = "Cour de cassation (Bulletin)"
 
@@ -30,13 +33,15 @@ def texte(el):
     return " ".join(" ".join(el.itertext()).split()) if el is not None else ""
 
 
-def trouver_archive():
+def horodatage(nom):
+    m = re.search(r"(\d{8}-\d{6})", nom)
+    return m.group(1) if m else ""
+
+
+def lister_archives():
     page = requests.get(BASE, timeout=60)
     page.raise_for_status()
-    noms = re.findall(r'href="(Freemium_cass_global_[^"]+\.tar\.gz)"', page.text)
-    if not noms:
-        raise SystemExit(f"Aucune archive globale trouvée à {BASE}")
-    return BASE + sorted(noms)[-1]
+    return sorted(set(re.findall(r'href="([^"?/][^"]*\.tar\.gz)"', page.text)))
 
 
 def lire(contenu):
@@ -59,40 +64,74 @@ def lire(contenu):
             "resume": resume[:400], "texte": resume[:4000]}
 
 
+def lire_archive(nom, docs, limite=0):
+    """Lit une archive en flux et met à jour docs (id -> décision)."""
+    vus = ignores = supprimes = 0
+    with requests.get(BASE + nom, stream=True, timeout=120) as r:
+        r.raise_for_status()
+        with tarfile.open(fileobj=r.raw, mode="r|gz") as tar:
+            for m in tar:
+                if not m.isfile():
+                    continue
+                if m.name.endswith(".xml"):
+                    vus += 1
+                    try:
+                        e = lire(tar.extractfile(m).read())
+                    except ET.ParseError:
+                        e = None
+                    if e:
+                        docs[e["id"]] = e   # une version plus récente remplace l'ancienne
+                    else:
+                        ignores += 1
+                    if vus % 10000 == 0:
+                        print(f"{vus} fichiers lus…", flush=True)
+                    if limite and vus >= limite:
+                        break
+                elif m.name.lower().endswith(".txt") and "suppression" in m.name.lower():
+                    brut = tar.extractfile(m).read().decode("utf-8", "ignore")
+                    for ident in set(re.findall(r"JURITEXT\d+", brut)):
+                        if docs.pop(f"cass:{ident}", None):
+                            supprimes += 1
+    return vus, ignores, supprimes
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--limite", type=int, default=0, help="arrêt après N fichiers XML (test)")
     limite = p.parse_args().limite
 
-    url = trouver_archive()
-    print("Archive :", url)
-    par_annee, vus, ignores = defaultdict(list), 0, 0
-    idx = open("indexsrc.jsonl", "w", encoding="utf-8")  # texte pour le moteur de recherche (non publié)
-    with requests.get(url, stream=True, timeout=120) as r:
-        r.raise_for_status()
-        with tarfile.open(fileobj=r.raw, mode="r|gz") as tar:
-            for m in tar:
-                if not (m.isfile() and m.name.endswith(".xml")):
-                    continue
-                vus += 1
-                try:
-                    e = lire(tar.extractfile(m).read())
-                except ET.ParseError:
-                    e = None
-                if e:
-                    brut = e.pop("texte")
-                    idx.write(json.dumps({"url": e["url"], "titre": e["titre"], "date": e["date"],
-                                          "matiere": e["matiere"], "source": e["source"],
-                                          "texte": brut}, ensure_ascii=False) + "\n")
-                    par_annee[e["date"][:4]].append(e)
-                else:
-                    ignores += 1
-                if vus % 10000 == 0:
-                    print(f"{vus} fichiers lus…", flush=True)
-                if limite and vus >= limite:
-                    break
+    noms = lister_archives()
+    globales = sorted(n for n in noms if n.startswith("Freemium_cass_global_"))
+    if not globales:
+        raise SystemExit(f"Aucune archive globale trouvée à {BASE}")
+    globale = globales[-1]
+    t0 = horodatage(globale)
+    maj = sorted((n for n in noms if not n.startswith("Freemium") and horodatage(n) > t0),
+                 key=horodatage)
+    print("Archive globale :", globale)
+    print("Derniers fichiers du dossier :", ", ".join(noms[-5:]))
+    print(f"Archives de mise à jour postérieures au {t0[:8]} : {len(maj)}")
 
-    idx.close()
+    docs = {}
+    vus, ignores, supprimes = lire_archive(globale, docs, limite)
+    if limite:
+        print("Mode test : archives de mise à jour ignorées.")
+    else:
+        for i, nom in enumerate(maj, 1):
+            v, ig, su = lire_archive(nom, docs)
+            vus, ignores, supprimes = vus + v, ignores + ig, supprimes + su
+            if i % 25 == 0 or i == len(maj):
+                print(f"{i}/{len(maj)} archives de mise à jour appliquées", flush=True)
+
+    par_annee = defaultdict(list)
+    with open("indexsrc.jsonl", "w", encoding="utf-8") as idx:
+        for e in docs.values():
+            brut = e.pop("texte")
+            idx.write(json.dumps({"url": e["url"], "titre": e["titre"], "date": e["date"],
+                                  "matiere": e["matiere"], "source": e["source"],
+                                  "texte": brut}, ensure_ascii=False) + "\n")
+            par_annee[e["date"][:4]].append(e)
+
     os.makedirs(SORTIE, exist_ok=True)
     comptes = {}
     for an, liste in sorted(par_annee.items()):
@@ -102,8 +141,11 @@ def main():
         comptes[an] = len(liste)
     with open(f"{SORTIE}/annees.json", "w", encoding="utf-8") as f:
         json.dump(comptes, f)
-    print(f"Terminé : {vus} fichiers lus, {sum(comptes.values())} décisions, {ignores} ignorés.")
+    recente = max((e["date"] for l in par_annee.values() for e in l), default="-")
+    print(f"Terminé : {vus} fichiers lus, {len(docs)} décisions, {ignores} ignorés, "
+          f"{supprimes} supprimées.")
     print("Années couvertes :", min(comptes, default="-"), "->", max(comptes, default="-"))
+    print("Décision la plus récente :", recente)
 
 
 if __name__ == "__main__":
