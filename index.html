@@ -37,6 +37,7 @@ article p{margin:0 0 8px;font-size:15px}
 .tag{border:1px solid var(--line);border-radius:6px;padding:0 7px}
 .empty{padding:26px;text-align:center;color:var(--mute);border:1px dashed var(--line);border-radius:10px}
 .more{display:block;margin:14px auto 0;padding:10px 22px;border:1px solid var(--ink);background:none;color:var(--ink);border-radius:8px;font:500 15px "Public Sans",sans-serif;cursor:pointer}
+mark{background:rgba(179,32,42,.18);color:inherit;border-radius:3px;padding:0 2px}
 footer{margin-top:28px;color:var(--mute);font-size:13px}
 </style>
 </head>
@@ -46,9 +47,9 @@ footer{margin-top:28px;color:var(--mute);font-size:13px}
   <p class="sub">Les actualités du droit français, des archives aux publications du jour.</p>
   <div class="time"><h2>Parcourir les archives par année</h2><div class="bars" id="bars"></div></div>
   <div class="tools">
-    <input id="q" type="search" placeholder="Rechercher un mot, un thème…" aria-label="Rechercher">
+    <input id="q" type="search" placeholder="Rechercher dans toutes les archives (ex. viol, licenciement)…" aria-label="Rechercher">
     <select id="src" aria-label="Source"><option value="">Toutes les sources</option></select>
-    <select id="ord" aria-label="Tri"><option value="d">Plus récentes</option><option value="a">Plus anciennes</option></select>
+    <select id="ord" aria-label="Tri"><option value="r">Pertinence</option><option value="d">Plus récentes</option><option value="a">Plus anciennes</option></select>
   </div>
   <div class="chips" id="chips"></div>
   <p class="count" id="count"></p>
@@ -56,13 +57,18 @@ footer{margin-top:28px;color:var(--mute);font-size:13px}
   <footer id="foot">Sources : Légifrance, Judilibre et archives de la DILA (Cour de cassation). Contenus de l’État réutilisés selon leurs conditions de réutilisation.</footer>
 </div>
 <script>
-var REC=[],MAN={},D=[],cache={},first=true,st={y:"",m:"",s:"",q:"",o:"d",n:50};
+var REC=[],MAN={},D=[],cache={},first=true,st={y:"",m:"",s:"",q:"",o:"r",n:50};
+var ARCH="Cour de cassation (Bulletin)",BASEMAT=["Civil","Commercial","Jurisprudence","Pénal","Travail"];
+var PFP=null,tok=0,PR=[],PD=[],tmr=null;
 var $=function(i){return document.getElementById(i)};
 function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function url(u){return /^https:\/\//.test(u||"")?esc(u):"#"}
 function yr(r){return(r.date||"").slice(0,4)}
 function fmt(d){return d?new Date(d+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}):""}
-function uniq(f){var a=[];D.forEach(function(r){var v=f(r);if(v&&a.indexOf(v)<0)a.push(v)});return a.sort()}
+function norm(t){return String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()}
+function uniq(f,extra){var a=(extra||[]).slice();D.forEach(function(r){var v=f(r);if(v&&a.indexOf(v)<0)a.push(v)});return a.sort()}
+function trier(a,b){var p=a.date||"",s=b.date||"";return st.o==="a"?(p>s?1:-1):(p<s?1:-1)}
+function pagefind(){if(!PFP)PFP=import("./pagefind/pagefind.js").catch(function(){return null});return PFP}
 function annees(){var c={};Object.keys(MAN).forEach(function(y){c[y]=MAN[y]});REC.forEach(function(r){var y=yr(r);if(y)c[y]=(c[y]||0)+1});return c}
 function bars(){
   var c=annees(),ys=Object.keys(c).sort(),max=Math.max.apply(null,ys.map(function(y){return c[y]}).concat([1])),b=$("bars"),sl=b.scrollLeft;
@@ -70,31 +76,63 @@ function bars(){
   Array.prototype.forEach.call(b.children,function(x){x.onclick=function(){choisir(x.dataset.y)}});
   b.scrollLeft=first?1e6:sl;first=false;
 }
+function enrecherche(){return st.q.trim().length>=2}
 function choisir(y){
   st.y=st.y===y?"":y;st.n=50;
-  if(st.y&&MAN[st.y]&&!cache[st.y]){
-    $("list").innerHTML='<div class="empty">Chargement de l’année '+esc(st.y)+'…</div>';
-    fetch("data/"+st.y+".json").then(function(r){return r.json()}).then(function(j){cache[st.y]=j;render()}).catch(function(){cache[st.y]=[];render()});
-  }else render();
+  if(enrecherche()||!st.y||!MAN[st.y]||cache[st.y]){render();return}
+  $("list").innerHTML='<div class="empty">Chargement de l’année '+esc(st.y)+'…</div>';
+  fetch("data/"+st.y+".json").then(function(r){return r.json()}).then(function(j){cache[st.y]=j;render()}).catch(function(){cache[st.y]=[];render()});
 }
 function chips(){
-  $("chips").innerHTML=[""].concat(uniq(function(r){return r.matiere})).map(function(m){return '<button class="chip" data-m="'+esc(m)+'" aria-pressed="'+(st.m===m)+'">'+(esc(m)||"Toutes les matières")+'</button>'}).join("");
+  $("chips").innerHTML=[""].concat(uniq(function(r){return r.matiere},BASEMAT)).map(function(m){return '<button class="chip" data-m="'+esc(m)+'" aria-pressed="'+(st.m===m)+'">'+(esc(m)||"Toutes les matières")+'</button>'}).join("");
   Array.prototype.forEach.call($("chips").children,function(b){b.onclick=function(){st.m=b.dataset.m;st.n=50;render()}});
 }
 function sources(){
-  $("src").innerHTML='<option value="">Toutes les sources</option>'+uniq(function(r){return r.source}).map(function(x){return '<option value="'+esc(x)+'"'+(x===st.s?' selected':'')+'>'+esc(x)+'</option>'}).join("");
+  $("src").innerHTML='<option value="">Toutes les sources</option>'+uniq(function(r){return r.source},[ARCH]).map(function(x){return '<option value="'+esc(x)+'"'+(x===st.s?' selected':'')+'>'+esc(x)+'</option>'}).join("");
+}
+function carte(x){return '<article><h3>'+esc(x.titre)+'</h3>'+(x.resume?'<p>'+esc(x.resume)+'</p>':'')+'<div class="meta"><span>'+fmt(x.date)+'</span><span class="tag">'+esc(x.matiere)+'</span><a href="'+url(x.url)+'" target="_blank" rel="noopener">'+esc(x.source)+'</a></div></article>'}
+function cartePF(d){var m=d.meta||{};return '<article><h3>'+esc(m.title)+'</h3>'+(d.excerpt?'<p>'+d.excerpt+'</p>':'')+'<div class="meta"><span>'+fmt(m.date)+'</span><span class="tag">'+esc(m.matiere)+'</span><a href="'+url(d.url)+'" target="_blank" rel="noopener">'+esc(m.source)+'</a></div></article>'}
+function charger(n){var part=PR.slice(PD.length,PD.length+n);return Promise.all(part.map(function(r){return r.data()})).then(function(d){PD=PD.concat(d)})}
+function afficher(loc,msg){
+  var tot=PR.length+loc.length;
+  $("count").textContent=tot+(tot>1?" résultats":" résultat")+(st.y?" en "+st.y:" dans toutes les années");
+  var h=msg?'<div class="empty">'+esc(msg)+'</div>':"";
+  h+=loc.map(carte).join("")+PD.map(cartePF).join("");
+  if(PD.length<PR.length)h+='<button class="more" id="more">Afficher plus</button>';
+  $("list").innerHTML=h||'<div class="empty">Aucun résultat. Essayez un autre mot, retirez un filtre ou désélectionnez l’année.</div>';
+  if($("more"))$("more").onclick=function(){this.textContent="Chargement…";charger(20).then(function(){afficher(loc,msg)})};
+}
+function recherche(){
+  var t=++tok,q=st.q.trim(),mots=norm(q).split(/\s+/).filter(Boolean);
+  var loc=REC.filter(function(x){
+    if(st.y&&yr(x)!==st.y)return false;if(st.m&&x.matiere!==st.m)return false;if(st.s&&x.source!==st.s)return false;
+    var h=norm((x.titre||"")+" "+(x.resume||"")+" "+(x.matiere||""));
+    return mots.every(function(w){return h.indexOf(w)>=0});
+  }).sort(trier);
+  PR=[];PD=[];
+  if(st.s&&st.s!==ARCH){afficher(loc,"");return}
+  $("list").innerHTML='<div class="empty">Recherche en cours…</div>';
+  pagefind().then(function(pf){
+    if(t!==tok)return;
+    if(!pf){afficher(loc,"Le moteur de recherche des archives n’est pas encore installé : seules les actualités récentes sont interrogées.");return}
+    var f={};if(st.y)f.annee=st.y;if(st.m)f.matiere=st.m;
+    var o={filters:f};if(st.o!=="r")o.sort={date:st.o==="a"?"asc":"desc"};
+    return pf.search(q,o).then(function(s){if(t!==tok)return;PR=s.results;return charger(20)}).then(function(){if(t===tok)afficher(loc,"")});
+  }).catch(function(){if(t===tok)afficher(loc,"Erreur pendant la recherche dans les archives.")});
+}
+function parcourir(){
+  tok++;
+  var r=D.filter(function(x){return(!st.m||x.matiere===st.m)&&(!st.s||x.source===st.s)}).sort(trier);
+  $("count").textContent=(st.y?"Année "+st.y+" : ":"Dernières actualités : ")+r.length+(r.length>1?" résultats":" résultat");
+  var h=r.slice(0,st.n).map(carte).join("");
+  if(r.length>st.n)h+='<button class="more" id="more">Afficher plus</button>';
+  $("list").innerHTML=h||'<div class="empty">Rien à afficher ici. Tapez un mot dans la recherche, ou choisissez une année dans la frise ci-dessus.</div>';
+  if($("more"))$("more").onclick=function(){st.n+=50;render()};
 }
 function render(){
   D=st.y?REC.filter(function(r){return yr(r)===st.y}).concat(cache[st.y]||[]):REC;
   bars();chips();sources();
-  var q=st.q.toLowerCase();
-  var r=D.filter(function(x){return(!st.m||x.matiere===st.m)&&(!st.s||x.source===st.s)&&(!q||((x.titre||"")+" "+(x.resume||"")+" "+(x.matiere||"")).toLowerCase().indexOf(q)>=0)})
-   .sort(function(a,b){var p=a.date||"",s=b.date||"";return st.o==="d"?(p<s?1:-1):(p>s?1:-1)});
-  $("count").textContent=(st.y?"Année "+st.y+" : ":"Dernières actualités : ")+r.length+(r.length>1?" résultats":" résultat");
-  var h=r.slice(0,st.n).map(function(x){return '<article><h3>'+esc(x.titre)+'</h3>'+(x.resume?'<p>'+esc(x.resume)+'</p>':'')+'<div class="meta"><span>'+fmt(x.date)+'</span><span class="tag">'+esc(x.matiere)+'</span><a href="'+url(x.url)+'" target="_blank" rel="noopener">'+esc(x.source)+'</a></div></article>'}).join("");
-  if(r.length>st.n)h+='<button class="more" id="more">Afficher plus</button>';
-  $("list").innerHTML=h||'<div class="empty">Aucun résultat. Retirez un filtre, élargissez la recherche, ou choisissez une année dans la frise ci-dessus.</div>';
-  if($("more"))$("more").onclick=function(){st.n+=50;render()};
+  if(enrecherche())recherche();else parcourir();
 }
 Promise.all([
   fetch("data.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}),
@@ -105,9 +143,9 @@ Promise.all([
   if(!REC.length&&!Object.keys(MAN).length){$("list").innerHTML='<div class="empty">Aucune actualité pour l’instant. Lancez la collecte pour remplir le site.</div>';return}
   render();
 }).catch(function(){$("list").innerHTML='<div class="empty">Impossible de charger data.json. En local, ouvrez la page via un petit serveur (python -m http.server), pas en double-cliquant sur le fichier.</div>'});
-$("q").oninput=function(){st.q=this.value;st.n=50;render()};
+$("q").oninput=function(){st.q=this.value;st.n=50;clearTimeout(tmr);tmr=setTimeout(render,300)};
 $("src").onchange=function(){st.s=this.value;st.n=50;render()};
-$("ord").onchange=function(){st.o=this.value;render()};
+$("ord").onchange=function(){st.o=this.value;st.n=50;render()};
 </script>
 </body>
 </html>
