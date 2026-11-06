@@ -18,13 +18,17 @@ concurrency:
 jobs:
   importer:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
       - run: pip install requests
 
@@ -33,10 +37,17 @@ jobs:
           LIMITE: ${{ github.event.inputs.limite }}
         run: python importer_dila.py --limite "$LIMITE"
 
-      - name: Publication des fichiers data/
+      - name: Construction du moteur de recherche
         run: |
+          rm -rf pagefind
+          npm install pagefind
+          node indexer.mjs
+
+      - name: Publication (data, pagefind)
+        run: |
+          touch .nojekyll
           git config user.name "bot-veille"
           git config user.email "bot@users.noreply.github.com"
-          git add data
-          git commit -m "Import des archives DILA" || exit 0
+          git add .nojekyll data pagefind
+          git commit -m "Import des archives DILA et index de recherche" || exit 0
           git push
