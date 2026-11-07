@@ -1,6 +1,78 @@
 {
-"maj": "2026-11-06T05:48:59+00:00",
+"maj": "2026-11-07T05:38:09+00:00",
 "items": [
+{
+"id": "judilibre:6aed6b346c2e1778124430d2",
+"source": "Judilibre",
+"date": "2026-11-05",
+"titre": "Ayant  relevé, d'une part, que la victime, alcoolisée et sous l'emprise de stupéfiants, avait traversé une voie rapide, protégée par un grillage en interdisant l'accès aux piétons, après avoir enjambé par deux fois les g",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6aed6b346c2e1778124430d2",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6aed6b3c6c2e177812443109",
+"source": "Judilibre",
+"date": "2026-11-05",
+"titre": "En cas de défaillance d'une entreprise d'assurance, seul le liquidateur de cette entreprise d'assurance, française ou dont le siège social est situé dans un autre Etat membre de l'Union européenne, peut saisir le Fonds d",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6aed6b3c6c2e177812443109",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6aed6b376c2e1778124430e0",
+"source": "Judilibre",
+"date": "2026-11-05",
+"titre": "Il résulte des articles 706-3 et 706-14 du code de procédure pénale que la réparation du dommage causé par une escroquerie peut être refusée ou son montant réduit en raison de la faute de la victime en relation de causal",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6aed6b376c2e1778124430e0",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6aed6b2b6c2e177812443080",
+"source": "Judilibre",
+"date": "2026-11-05",
+"titre": "Décision n° 26-12.968 (cc)",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6aed6b2b6c2e177812443080",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6aeccf6a6c2e1778123ee445",
+"source": "Judilibre",
+"date": "2026-11-05",
+"titre": "Il résulte de l'article 583 du code de procédure civile qu'est recevable à former tierce opposition toute personne qui y a intérêt, à la condition qu'elle n'ait été ni partie ni représentée au jugement qu'elle attaque et",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6aeccf6a6c2e1778123ee445",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6aed6b276c2e177812443067",
+"source": "Judilibre",
+"date": "2026-11-05",
+"titre": "La cour d'appel qui retient qu'un jugement a déterminé les droits de propriété des parties sur des parcelles et que l'action engagée, tendant à faire publier un acte complémentaire afin de rendre la publication conforme ",
+"matiere": "Immobilier",
+"url": "https://www.courdecassation.fr/decision/6aed6b276c2e177812443067",
+"resume": "cc – chambre civ3"
+},
+{
+"id": "judilibre:6aed6b316c2e1778124430b7",
+"source": "Judilibre",
+"date": "2026-11-05",
+"titre": "Il résulte de l'article 16 du code de procédure civile que le juge ne peut modifier le point de départ de l'astreinte sans avoir au préalable invité les parties, au besoin en sollicitant une note en délibéré, à présenter",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6aed6b316c2e1778124430b7",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6aed6b2e6c2e177812443091",
+"source": "Judilibre",
+"date": "2026-11-05",
+"titre": "Décision n° 26-12.833 (cc)",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6aed6b2e6c2e177812443091",
+"resume": "cc – chambre civ2"
+},
 {
 "id": "judilibre:6aeaf4297a1020213712f8fe",
 "source": "Judilibre",
@@ -152,6 +224,33 @@
 "titre": "Il résulte de la combinaison des articles 1317 et 1318 du code civil, dans leur rédaction antérieure à celle issue de l'ordonnance n°2016-131 du 10 février 2016, et des articles 2 et 41 du décret n° 71-941 du 26 novembre",
 "matiere": "Famille et civil",
 "url": "https://www.courdecassation.fr/decision/6aeaf5ca7a10202137133f51",
+"resume": "cc – chambre civ1"
+},
+{
+"id": "judilibre:6aeda69a6c2e1778124748de",
+"source": "Judilibre",
+"date": "2026-11-04",
+"titre": "Décision n° 26-85.253 (cc)",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6aeda69a6c2e1778124748de",
+"resume": "cc – chambre cr"
+},
+{
+"id": "judilibre:6aeda69d6c2e17781247492f",
+"source": "Judilibre",
+"date": "2026-11-04",
+"titre": "Décision n° 26-85.251 (cc)",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6aeda69d6c2e17781247492f",
+"resume": "cc – chambre cr"
+},
+{
+"id": "judilibre:6aed6b246c2e177812443046",
+"source": "Judilibre",
+"date": "2026-11-04",
+"titre": "Conformément aux articles 19 et 22 du décret n° 93-82 du 15 janvier 1993, portant application de l'article 1er ter de l'ordonnance n° 45-2590 du 2 novembre 1945 et relatif aux notaires salariés, tout licenciement d'un no",
+"matiere": "Famille et civil",
+"url": "https://www.courdecassation.fr/decision/6aed6b246c2e177812443046",
 "resume": "cc – chambre civ1"
 },
 {
@@ -89513,6 +89612,15 @@
 "titre": "JORF n°0260 du 6 novembre 2026",
 "matiere": "Journal officiel",
 "url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055063671",
+"resume": "Numéro du Journal officiel de la République française."
+},
+{
+"id": "jorf:JORFCONT000055069054",
+"source": "Journal officiel",
+"date": null,
+"titre": "JORF n°0261 du 7 novembre 2026",
+"matiere": "Journal officiel",
+"url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055069054",
 "resume": "Numéro du Journal officiel de la République française."
 }
 ]
