@@ -1,6 +1,132 @@
 {
-"maj": "2026-11-10T05:42:58+00:00",
+"maj": "2026-11-11T05:48:24+00:00",
 "items": [
+{
+"id": "judilibre:6af2c6cc6c2e1778126fe3dc",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "La personne physique qui adhère à la charte d'une association de dirigeants de commerces de grande distribution, en vertu de laquelle elle s'engage notamment à redistribuer à son personnel une quote-part des résultats de",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6cc6c2e1778126fe3dc",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c6c76c2e1778126fe354",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Doit être censurée une cour d'appel qui, sur le fondement de l'article 145 du code de procédure civile, a ordonné la communication de données à caractère personnel des autres salariés de l'entreprise relatives au nom et ",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6c76c2e1778126fe354",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c6c46c2e1778126fe310",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Il résulte des articles L. 2511-1 du code du travail, L. 1324-7 et L. 1324-8 du code des transports que le non-respect du délai d'information individuelle de l'employeur au moins 48 heures à l'avance prévu à l'article L.",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6c46c2e1778126fe310",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c6bc6c2e1778126fe273",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Il résulte de l'article R. 713-14 du code du travail ancien demeuré applicable, de l'article 10.1 de l'accord du 12 mars 2019 relatif à la mise en place et au fonctionnement des comités sociaux et économiques de GRDF et ",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6bc6c2e1778126fe273",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c6b86c2e1778126fe221",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Il résulte de l'article L. 2132-3 du code du travail que, si un syndicat peut agir en justice pour faire reconnaître l'existence d'une irrégularité commise par l'employeur au regard de dispositions légales, réglementaire",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6b86c2e1778126fe221",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c5326c2e1778126fc699",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Doit être écarté le moyen qui reproche à la chambre de l'instruction d'avoir ordonné un non-lieu à suivre sans rechercher si les faits dénoncés relevaient d'une qualification prévue par le code pénal, alors que, d'une pa",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6af2c5326c2e1778126fc699",
+"resume": "cc – chambre cr"
+},
+{
+"id": "judilibre:6af2c53c6c2e1778126fc735",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "1. La notification du droit de se taire telle que prévue à l'article préliminaire est une formalité substantielle au sens de l'article 802 du code de procédure pénale, dont l'inobservation est susceptible d'entraîner la ",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6af2c53c6c2e1778126fc735",
+"resume": "cc – chambre cr"
+},
+{
+"id": "judilibre:6af2c6d66c2e1778126fe4db",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Décision n° 25-14.863 (cc)",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6d66c2e1778126fe4db",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c6b46c2e1778126fe1ac",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Sous réserve des prohibitions prévues par les articles L. 1242-6 du code du travail, en ce qui concerne les contrats à durée déterminée, et L. 1251-10 du même code, en ce qui concerne les contrats de travail temporaire, ",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6b46c2e1778126fe1ac",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c5356c2e1778126fc6e7",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "L'article 173, alinéa 3, du code de procédure pénale, en prévoyant que le requérant saisit la chambre de l'instruction par requête motivée, dont il adresse copie au juge d'instruction, exige qu'il procède de façon simult",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6af2c5356c2e1778126fc6e7",
+"resume": "cc – chambre cr"
+},
+{
+"id": "judilibre:6af2c6d96c2e1778126fe53d",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Il résulte de l'article L. 2254-2 du code du travail que l'absence de suppression de poste en conséquence des licenciements prononcés à la suite du refus opposé par des salariés à la modification de leur contrat de trava",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6d96c2e1778126fe53d",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c6d26c2e1778126fe47a",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Il résulte de l'article 2 du code civil qu'une loi nouvelle s'applique immédiatement aux effets à venir des situations juridiques non contractuelles en cours au moment où elle entre en vigueur.\nIl en découle que la loi n",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6d26c2e1778126fe47a",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c6c06c2e1778126fe2c7",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Il résulte des dispositions des articles L. 1237-14 et L. 1237-15 du code du travail qu'à l'égard d'un salarié bénéficiant d'une protection, mentionné aux articles L. 2411-1 et L. 2411-2, le recours en nullité de cette c",
+"matiere": "Travail",
+"url": "https://www.courdecassation.fr/decision/6af2c6c06c2e1778126fe2c7",
+"resume": "cc – chambre soc"
+},
+{
+"id": "judilibre:6af2c5386c2e1778126fc711",
+"source": "Judilibre",
+"date": "2026-11-10",
+"titre": "Lorsqu'une requête en nullité est irrecevable pour ne pas respecter les conditions de recevabilité prévues à  l'article 173, alinéa 3, du code de procédure pénale, la chambre de l'instruction n'est pas régulièrement sais",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6af2c5386c2e1778126fc711",
+"resume": "cc – chambre cr"
+},
 {
 "id": "judilibre:6aed6b346c2e1778124430d2",
 "source": "Judilibre",
@@ -89639,6 +89765,15 @@
 "titre": "JORF n°0263 du 10 novembre 2026",
 "matiere": "Journal officiel",
 "url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055075181",
+"resume": "Numéro du Journal officiel de la République française."
+},
+{
+"id": "jorf:JORFCONT000055078255",
+"source": "Journal officiel",
+"date": null,
+"titre": "JORF n°0264 du 11 novembre 2026",
+"matiere": "Journal officiel",
+"url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055078255",
 "resume": "Numéro du Journal officiel de la République française."
 }
 ]
