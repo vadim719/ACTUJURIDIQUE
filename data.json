@@ -1,6 +1,87 @@
 {
-"maj": "2026-11-19T05:53:01+00:00",
+"maj": "2026-11-20T05:53:31+00:00",
 "items": [
+{
+"id": "judilibre:6afed34d6c2e177812e431cc",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "Il résulte des articles 155 et 496, alinéa 2, du code de procédure civile que si le premier de ces textes donne pouvoir au juge qui a ordonné une mesure d'instruction d'en contrôler l'exécution, il ne donne pas un tel po",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6afed34d6c2e177812e431cc",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6afed3466c2e177812e430b7",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "Décision n° 24-10.115 (cc)",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6afed3466c2e177812e430b7",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6afed3436c2e177812e43040",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "La demande d'augmentation de la mise à prix ne peut être présentée, en application de l'article R. 311-5 du code des procédures civiles d'exécution, qu'à l'audience d'orientation. Par conséquent, une cour d'appel doit pr",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6afed3436c2e177812e43040",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6afed33c6c2e177812e42f30",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "Ni la remise, lors de la conclusion du bail commercial, ni l'annexion, à ce bail, du diagnostic de performance énergétique prévu par l'article L. 134-1 code de la construction et de l'habitation ou de l'inventaire des ca",
+"matiere": "Immobilier",
+"url": "https://www.courdecassation.fr/decision/6afed33c6c2e177812e42f30",
+"resume": "cc – chambre civ3"
+},
+{
+"id": "judilibre:6afed3496c2e177812e4312e",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "Décision n° 23-23.089 (cc)",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6afed3496c2e177812e4312e",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6afed33f6c2e177812e42fb6",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "Les incapacités d'enchérir sont limitativement énumérées et les articles 1er et 9 du code de déontologie des agents immobiliers, des administrateurs de biens, des syndics de copropriété et des marchands de listes annexé ",
+"matiere": "Civil",
+"url": "https://www.courdecassation.fr/decision/6afed33f6c2e177812e42fb6",
+"resume": "cc – chambre civ2"
+},
+{
+"id": "judilibre:6afed3396c2e177812e42e8d",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "La valeur locative, déterminée notamment au regard des prix couramment pratiqués dans le voisinage en considération des critères mentionnés aux articles R. 145-3 à R. 145-6 du code de commerce, doit être minorée par le j",
+"matiere": "Immobilier",
+"url": "https://www.courdecassation.fr/decision/6afed3396c2e177812e42e8d",
+"resume": "cc – chambre civ3"
+},
+{
+"id": "judilibre:6afed3356c2e177812e42dd1",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "Le bailleur qui a délivré au locataire, à l'expiration d'une période triennale, un congé pour reprise sur le fondement des dispositions de l'article L. 145-18 du code de commerce motivé par un projet de destruction et re",
+"matiere": "Immobilier",
+"url": "https://www.courdecassation.fr/decision/6afed3356c2e177812e42dd1",
+"resume": "cc – chambre civ3"
+},
+{
+"id": "judilibre:6afed3316c2e177812e42d1e",
+"source": "Judilibre",
+"date": "2026-11-19",
+"titre": "Décision n° 25-86.289 (cc)",
+"matiere": "Immobilier",
+"url": "https://www.courdecassation.fr/decision/6afed3316c2e177812e42d1e",
+"resume": "cc – chambre civ3"
+},
 {
 "id": "judilibre:6afd717e6c2e177812d50924",
 "source": "Judilibre",
@@ -90179,6 +90260,15 @@
 "titre": "JORF n°0270 du 19 novembre 2026",
 "matiere": "Journal officiel",
 "url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055101491",
+"resume": "Numéro du Journal officiel de la République française."
+},
+{
+"id": "jorf:JORFCONT000055111379",
+"source": "Journal officiel",
+"date": null,
+"titre": "JORF n°0271 du 20 novembre 2026",
+"matiere": "Journal officiel",
+"url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055111379",
 "resume": "Numéro du Journal officiel de la République française."
 }
 ]
