@@ -1,5 +1,5 @@
 {
-"maj": "2026-11-21T05:47:53+00:00",
+"maj": "2026-11-22T05:48:05+00:00",
 "items": [
 {
 "id": "judilibre:6afed34d6c2e177812e431cc",
@@ -90278,6 +90278,15 @@
 "titre": "JORF n°0272 du 21 novembre 2026",
 "matiere": "Journal officiel",
 "url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055118001",
+"resume": "Numéro du Journal officiel de la République française."
+},
+{
+"id": "jorf:JORFCONT000055119238",
+"source": "Journal officiel",
+"date": null,
+"titre": "JORF n°0273 du 22 novembre 2026",
+"matiere": "Journal officiel",
+"url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055119238",
 "resume": "Numéro du Journal officiel de la République française."
 }
 ]
