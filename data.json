@@ -1,6 +1,33 @@
 {
-"maj": "2026-11-24T05:51:14+00:00",
+"maj": "2026-11-25T05:51:58+00:00",
 "items": [
+{
+"id": "judilibre:6b05604c6c2e17781213bf72",
+"source": "Judilibre",
+"date": "2026-11-24",
+"titre": "La personne poursuivie pour le délit de contestation de l'existence de crime contre l'humanité prévu à l'article 24 bis de la loi du 29 juillet 1881 sur la liberté de la presse peut invoquer le moyen pris d'une atteinte ",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6b05604c6c2e17781213bf72",
+"resume": "cc – chambre cr"
+},
+{
+"id": "judilibre:6b0560486c2e17781213bf3f",
+"source": "Judilibre",
+"date": "2026-11-24",
+"titre": "Aucune disposition du code de procédure pénale n'interdit à la partie qui a exercé son recours dans des conditions irrégulières de le réitérer dans les formes légales avant l'expiration du délai qui lui est imparti et ce",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6b0560486c2e17781213bf3f",
+"resume": "cc – chambre cr"
+},
+{
+"id": "judilibre:6b0560176c2e17781213b8b4",
+"source": "Judilibre",
+"date": "2026-11-24",
+"titre": "Décision n° 26-81.683 (cc)",
+"matiere": "Pénal",
+"url": "https://www.courdecassation.fr/decision/6b0560176c2e17781213b8b4",
+"resume": "cc – chambre cr"
+},
 {
 "id": "judilibre:6afed34d6c2e177812e431cc",
 "source": "Judilibre",
@@ -90296,6 +90323,15 @@
 "titre": "JORF n°0274 du 24 novembre 2026",
 "matiere": "Journal officiel",
 "url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055129304",
+"resume": "Numéro du Journal officiel de la République française."
+},
+{
+"id": "jorf:JORFCONT000055137046",
+"source": "Journal officiel",
+"date": null,
+"titre": "JORF n°0275 du 25 novembre 2026",
+"matiere": "Journal officiel",
+"url": "https://www.legifrance.gouv.fr/jorf/id/JORFCONT000055137046",
 "resume": "Numéro du Journal officiel de la République française."
 }
 ]
